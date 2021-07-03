@@ -1,10 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeNavigator from "./homeNavigator";
 import AccountNavigator from "./accountNavigator";
 import UpdateNavigator from "./updateNavigator";
 import OtherNavigator from "./otherNavigator"
+import { isAndroid } from '../utils/platform';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,7 @@ export default function Navigators() {
         activeTintColor: '#F1222D',
         inactiveTintColor: "#858585",
         style: {
-          height: 90,
+          height: isAndroid ? 60 : 90,
           paddingVertical: 5,
           backgroundColor: "#fff"
         },
@@ -31,9 +32,20 @@ export default function Navigators() {
         name="home"
         component={HomeNavigator}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Akèy',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialCommunityIcons name="home-circle" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="request"
+        component={OtherNavigator}
+        options={{
+          tabBarLabel: 'Rekèt',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="plus-circle" color={color} size={size} />
           ),
         }}
       />
@@ -42,20 +54,9 @@ export default function Navigators() {
         name="update"
         component={UpdateNavigator}
         options={{
-          tabBarLabel: 'Updates',
+          tabBarLabel: 'Notifikasyon',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="bell" color={color} size={size} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="other"
-        component={OtherNavigator}
-        options={{
-          tabBarLabel: 'Other',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="plus-circle" color={color} size={size} />
+            <MaterialCommunityIcons name="bell-circle" color={color} size={size} />
           ),
         }}
       />
@@ -64,9 +65,9 @@ export default function Navigators() {
         name="account"
         component={AccountNavigator}
         options={{
-          tabBarLabel: 'Account',
+          tabBarLabel: 'Kont',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+            <MaterialCommunityIcons name="account-circle" color={color} size={size} />
           ),
         }}
       />
