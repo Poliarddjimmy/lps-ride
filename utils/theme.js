@@ -1,9 +1,7 @@
 
 import {
   defaultHeader,
-  updateHeader,
-  accountHeader,
-  otherHeader,
+  cancelSaveHeader
 } from "./headers";
 
 
@@ -15,10 +13,10 @@ const theme = {
     gray: "#858585"
   },
   header: {
-    default: defaultHeader,
-    update: updateHeader,
-    account: accountHeader,
-    other: otherHeader
+    default: defaultHeader(),
+    update: defaultHeader("Notifikation yo"),
+    account: defaultHeader("Kont"),
+    other: cancelSaveHeader("Fè yon Rekèt"),
   },
   primaryButton: {
     color: "#00548F",
