@@ -1,8 +1,42 @@
 {
   "expo": {
-    "name": "lpsRide",
-    "slug": "lpsRide",
+    "name": "LPS Ride",
+    "slug": "lps-ride",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "LPS",
+            "project": "lps-ride",
+            "authToken": ""
+          }
+        }
+      ]
+    },
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lps.lpsride"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "android": {
+      "package": "com.lps.lpsride"
+    },
+    "description": "Ride app",
+
     "assetBundlePatterns": [
       "**/*"
     ]
