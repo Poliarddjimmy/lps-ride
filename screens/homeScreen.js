@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../utils/dimensions';
-
+import styled from 'styled-components/native';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 
 
 // local import
 import Layout from '../components/layout/layout';
+import { MenuBotton } from "../services/navigationServices"
+import { isAndroid } from "../utils/platform"
 
 const HomeScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -61,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <Layout>
+    <Layout navigation={navigation}>
       {mapLocation &&
         <MapView
           initialRegion={{
@@ -85,34 +87,65 @@ const HomeScreen = ({ navigation }) => {
         </MapView>
       }
 
-      <View
-        style={{
-          alignSelf: 'center',
-          alignContent: 'center',
-          padding: 10,
-          paddingHorizontal: 35,
-          margin: 5,
-          borderRadius: 5,
-          alignItems: 'center',
-          position: 'absolute',
-        }}
-      >
-        <Button title="Toggle drawer" onPress={() => navigation.toggleDrawer()} />
-      </View>
+      <Container>
+        {/* <MenuBotton navigation={navigation} /> */}
+      </Container>
+      <RequestContainer>
+        <RequestText>
+          Fè yon Rekèt
+        </RequestText>
+      </RequestContainer>
     </Layout>
   );
 }
 export default HomeScreen
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   map: {
+    flex: 1,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
   },
+
+
+  bottomView: {
+
+  },
+  textStyle: {
+    color: '#fff',
+    fontSize: 18,
+  },
+
+
+
 });
+
+
+const Container = styled.View`
+  position: absolute;
+  padding: 10px;
+  paddingHorizontal: 35px;
+  margin: 5px; 
+  width: 100%;
+`;
+
+const RequestContainer = styled.TouchableOpacity`
+  width: 90%;
+  margin: 20px;
+  height: 80px;
+  border-radius:5px;
+  backgroundColor: ${props => props.theme.colors.warningFade}; 
+  border-width: 2px; 
+  border-color: ${props => props.theme.colors.warning};
+  justifyContent: center;
+  alignItems: center;
+  position: absolute; 
+  bottom: 50px; 
+  
+`;
+
+const RequestText = styled.Text`
+  font-family: ${props => props.theme.font.semiBold};
+  font-size: 40px;
+  color: ${props => props.theme.colors.white}
+`;

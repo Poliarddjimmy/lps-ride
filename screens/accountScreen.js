@@ -1,13 +1,13 @@
 import React from "react"
-import { Text, View, Button } from 'react-native';
+
+// local import
+import Layout from '../components/layout/layout';
 
 const AccountScreen = ({ navigation }) => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Button title="Toggle drawer" onPress={() => navigation.toggleDrawer()} />
+    <Layout navigation={navigation}>
 
-      <Text>Account!</Text>
-    </View>
+    </Layout>
   );
 }
 export default AccountScreen

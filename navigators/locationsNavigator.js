@@ -7,10 +7,10 @@ import theme from "../utils/theme"
 const LocationsNavigator = ({ navigation, route }) => {
   const { Screen, Navigator } = createStackNavigator();
 
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'location';
 
-  return <Navigator initialRouteName="index">
-    <Screen name="index" options={theme.header.locations} component={LocationsScreen} />
+  return <Navigator initialRouteName="location">
+    <Screen name="location" options={theme.header.locations} component={LocationsScreen} />
   </Navigator>
 
 }

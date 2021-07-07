@@ -3,7 +3,7 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
-  Image,
+  // Image,
   Text,
   Linking,
 } from 'react-native';
@@ -13,43 +13,80 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import styled from 'styled-components/native';
 
 import { isAndroid } from '../../utils/platform';
-
-import LogoHeaderTitle from "../../components/layout/logoHeaderTitle";
 
 const CustomSidebarMenu = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{
-        height: isAndroid ? 70 : 0,
-        flex: 0.1,
-        padding: 10,
-        marginBottom: isAndroid ? 35: 0,
-        borderBottomColor:'#858585',
-        borderBottomWidth: 1,
-        flexDirection: "row",
-        alignItems: "center"
-      }}>
-        {/* <LogoHeaderTitle /> */}
-        <Image 
-          source={ require("../../assets/logo.png") }
-          style={{ width: 250, height: 50 }}
-        />
-      </View>
+      <HeaderContainer>
+        <ImageBox>
+          <Image
+            source={require("../../assets/me.jpg")}
+          />
+        </ImageBox>
+
+        <NameBox>
+          Djimmy Poliard
+        </NameBox>
+
+        <PhoneBox>
+          +1 849 210 7910
+        </PhoneBox>
+      </HeaderContainer>
+
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: 'center',
-          color: '#016C73'
-        }}>
+
+      <BottomText>
         Freedom Ride
-      </Text>
+      </BottomText>
     </SafeAreaView>
   );
 };
 
 export default CustomSidebarMenu;
+
+const HeaderContainer = styled.View`
+  border-bottom-color:#85858569;
+  border-bottom-width: 1px;
+  margin-bottom: ${isAndroid ? "35px" : "0px"};
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+`;
+
+const ImageBox = styled.View`
+  padding: 10px;
+  border-radius: 50px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center
+`;
+
+const Image = styled.Image`
+  width: 100px; 
+  height: 100px; 
+  border-radius: 100px
+`;
+
+const BottomText = styled.Text`
+  font-size: 16px;
+  text-align: center;
+  color: #2197b4ff 
+`;
+
+const NameBox = styled.Text `
+  font-weight: 600;
+  font-size: 20px;
+  color: #171a23ff;
+`;
+
+const PhoneBox = styled.Text `
+font-weight: 600;
+  margin-bottom: 20px;
+  color: #2197b4ff;
+`;

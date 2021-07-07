@@ -4,7 +4,7 @@
     "slug": "lps-ride",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/android-1.png",
+    "icon": "./assets/android-2.png",
     "hooks": {
       "postPublish": [
         {
@@ -18,7 +18,7 @@
       ]
     },
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

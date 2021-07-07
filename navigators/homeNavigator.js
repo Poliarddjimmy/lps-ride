@@ -7,10 +7,10 @@ import theme from "../utils/theme"
 const HomeNavigator = ({ navigation, route }) => {
   const { Screen, Navigator } = createStackNavigator();
 
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'home';
 
-  return <Navigator initialRouteName="index">
-    <Screen name="index" options={theme.header.default} component={HomeScreen} />
+  return <Navigator initialRouteName="home">
+    <Screen name="home" options={theme.header.default} component={HomeScreen} />
   </Navigator>
 
 }

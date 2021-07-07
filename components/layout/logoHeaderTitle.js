@@ -18,7 +18,7 @@ export default LogoHeaderTitle;
 
 LogoHeaderTitle.propTypes = {
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
 }
 
 LogoHeaderTitle.defaultProps = {

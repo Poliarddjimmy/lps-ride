@@ -16,54 +16,57 @@ import CustomSidebarMenu from './customSidebarMenu';
 
 const Drawer = createDrawerNavigator();
 
-export default function Navigators() {
+export default function Navigators(props) {
   return (
     <Drawer.Navigator
       drawerContentOptions={{
-        activeTintColor: '#00496E',
+        activeTintColor: '#2197b4ff',
         itemStyle: { marginVertical: 5 },
+        labelStyle: {
+          fontFamily: "Inter_600SemiBold"
+        }
       }}
       drawerContent={(props) => <CustomSidebarMenu {...props} />}>
       <Drawer.Screen
-        name="Home"
+        name="Akèy"
         component={HomeNavigator}
         options={{
           drawerIcon: config => <Octicons
             size={23}
-            color="#016C73"
+            color={ "#171a23ff" }
             name={Platform.OS === 'android' ? 'home' : 'home'}></Octicons>
         }}
       />
 
       <Drawer.Screen
-        name="Notifications"
+        name="Notifikasyon"
         component={UpdateNavigator}
         options={{
           drawerIcon: config => <Fontisto
             size={23}
-            color="#016C73"
+            color={"#171a23ff"}
             name={Platform.OS === 'android' ? 'bell' : 'bell'}></Fontisto>
         }}
       />
 
       <Drawer.Screen
-        name="Locations"
+        name="Lokalite"
         component={LocationsNavigator}
         options={{
           drawerIcon: config => <SimpleLineIcons
             size={23}
-            color="#016C73"
+            color="#171a23ff"
             name={Platform.OS === 'android' ? 'location-pin' : 'location-pin'}></SimpleLineIcons>
         }}
       />
 
       <Drawer.Screen
-        name="Account"
+        name="Kont"
         component={AccountNavigator}
         options={{
           drawerIcon: config => <MaterialCommunityIcons
             size={23}
-            color="#016C73"
+            color="#171a23ff"
             name={Platform.OS === 'android' ? 'account-outline' : 'account-outline'}></MaterialCommunityIcons>
         }}
       />

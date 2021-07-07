@@ -7,10 +7,10 @@ import theme from "../utils/theme"
 const UpdateNavigator = ({ navigation, route }) => {
   const { Screen, Navigator } = createStackNavigator();
 
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'notification';
 
-  return <Navigator initialRouteName="index">
-    <Screen name="index" options={theme.header.update} component={UpdateScreen} />
+  return <Navigator initialRouteName="notification">
+    <Screen name="notification" options={theme.header.update} component={UpdateScreen} />
   </Navigator>
 
 }

@@ -2,7 +2,6 @@
 import React from "react"
 import styled from "styled-components/native";
 import { isAndroid } from '../utils/platform';
-import LogoImage from "../assets/logo.png";
 import LogoHeaderTitle from "../components/layout/logoHeaderTitle";
 import { goBack } from "../services/navigationServices";
 import { Entypo } from '@expo/vector-icons';
@@ -33,7 +32,7 @@ const cancelSaveHeader = (title) => (
     },
     headerTitle: () => (
       <DefaultHeaderContainer>
-        <LogoHeaderTitle height={title && 45} />
+        <LogoHeaderTitle style={{ marginLeft: -30 }} height={title && 45} />
         <HeaderTitle style={{ marginTop: -12 }}>
           {title}
         </HeaderTitle>

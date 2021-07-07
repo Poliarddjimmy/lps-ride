@@ -7,17 +7,20 @@ import {
 
 const theme = {
   colors: {
-    primary: "#00496E",
-    secondary: "#016C73",
-    warning: "#F29F24",
+    primary: "#171a23ff",
+    primaryPalm: "#171a23be",
+    secondary: "#2197b4ff",
+    warning: "#ef8215ff",
+    warningFade: "#ef8215da",
     danger: "#F1222D",
-    gray: "#858585"
+    gray: "#858585",
+    white: "#ffffff"
   },
   header: {
     default: defaultHeader(),
-    update: defaultHeader("Notifikation yo"),
-    account: defaultHeader("Kont"),
-    locations: defaultHeader("Lokasyon mwen yo"),
+    update: defaultHeader(),
+    account: defaultHeader(),
+    locations: defaultHeader(),
     other: cancelSaveHeader("Lokasyon mwen yo"),
   },
   primaryButton: {
