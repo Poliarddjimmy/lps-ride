@@ -18,4 +18,6 @@ target 'lpsRide' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-google-places', :path => '../node_modules/react-native-google-places'
+
 end

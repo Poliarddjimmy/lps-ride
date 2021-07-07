@@ -7,7 +7,8 @@ import {
 
 const theme = {
   colors: {
-    primary: "#02907A",
+    primary: "#00496E",
+    secondary: "#016C73",
     warning: "#F29F24",
     danger: "#F1222D",
     gray: "#858585"
@@ -16,7 +17,8 @@ const theme = {
     default: defaultHeader(),
     update: defaultHeader("Notifikation yo"),
     account: defaultHeader("Kont"),
-    other: cancelSaveHeader("Fè yon Rekèt"),
+    locations: defaultHeader("Lokasyon mwen yo"),
+    other: cancelSaveHeader("Lokasyon mwen yo"),
   },
   primaryButton: {
     color: "#00548F",
