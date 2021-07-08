@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../utils/dimensions';
 import styled from 'styled-components/native';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import axios from 'axios';
 
 
 // local import
 import Layout from '../components/layout/layout';
-import { MenuBotton } from "../services/navigationServices"
-import { isAndroid } from "../utils/platform"
+import {API_KEY} from "@env"
 
 const HomeScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
+  const [destination, setDestination] = useState(null);
   const [mapLocation, setMapLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -33,13 +34,11 @@ const HomeScreen = ({ navigation }) => {
     location && setMapLocation(regionFrom(location?.coords?.latitude, location?.coords?.longitude, location?.coords?.accuracy))
   }, [location])
 
+  const ref = useRef();
 
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+  useEffect(() => {
+    ref.current?.setAddressText('');
+  }, []);
 
 
   const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
@@ -61,6 +60,18 @@ const HomeScreen = ({ navigation }) => {
   const onRegionChange = (region) => {
     // console.log("Sa se nouvo a", JSON.stringify(region))
   }
+
+  const getPlaceId = async (details) => {
+    //get the location using the place_id
+    const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${details?.place_id}&key=${API_KEY}`)
+    const { location } = data?.result.geometry
+    //set the destination
+    setDestination({
+      latitude: location.lat,
+      longitude: location.lng
+    })
+  }
+
 
   return (
     <Layout navigation={navigation}>
@@ -84,17 +95,76 @@ const HomeScreen = ({ navigation }) => {
             coordinate={{ latitude: mapLocation?.latitude, longitude: mapLocation?.longitude }}
             title={"Current Location"}
           />
+          {destination && 
+            <Marker
+              coordinate={destination}
+              title={"Current Location"}
+            />
+          }
         </MapView>
       }
-
       <Container>
-        {/* <MenuBotton navigation={navigation} /> */}
-      </Container>
-      <RequestContainer>
+        <SimpleText>
+          Alo Djimmy Poliard,
+        </SimpleText>
         <RequestText>
-          Fè yon Rekèt
+          Ki kote ou vle ale kounyea?
         </RequestText>
-      </RequestContainer>
+      </Container>
+      <GooglePlacesAutocomplete
+        ref={ref}
+        placeholder='Antre kote ou vle ale a la'
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          getPlaceId(details)
+          // console.log(data, details);
+        }}
+        query={{
+          key: `${API_KEY}`,
+          language: 'en',
+        }}
+        styles={{
+          container: {
+            height: 100,
+            flex: 1,
+            backgroundColor: "#fff",
+            paddingHorizontal: 15
+          },
+          textInputContainer: {
+            borderRadius: 10,
+            shadowColor: "#171a23be",
+            shadowOffset: {
+              width: 1,
+              height: 1,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+
+            elevation: 5,
+          },
+          textInput: {
+            height: 48,
+            color: "#171a23ff",
+            fontSize: 16,
+            borderWidth: 0.5,
+            borderColor: "rgba(0,0,0,0.1)",
+            padding: 20,
+            borderRadius: 10,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
+
+      {/* 
+      <RequestContainer>
+        <SimpleText>
+          kjhfaksk
+        </SimpleText>
+      </RequestContainer> */}
+
+
     </Layout>
   );
 }
@@ -122,10 +192,8 @@ const styles = StyleSheet.create({
 
 
 const Container = styled.View`
-  position: absolute;
-  padding: 10px;
-  paddingHorizontal: 35px;
-  margin: 5px; 
+  padding: 15px;
+  backgroundColor: ${props => props.theme.colors.white}; 
   width: 100%;
 `;
 
@@ -144,8 +212,23 @@ const RequestContainer = styled.TouchableOpacity`
   
 `;
 
+
+const SimpleText = styled.Text`
+  font-family: ${props => props.theme.font.regular};
+  font-size: 17px;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 5px;
+`;
+
 const RequestText = styled.Text`
   font-family: ${props => props.theme.font.semiBold};
-  font-size: 40px;
-  color: ${props => props.theme.colors.white}
+  color: ${props => props.theme.colors.primary};
+  font-size: 18px;
+`;
+
+const LocationContainer = styled.View`
+  padding: 15px;
+  flex: 1;
+  flex-direction: column;
+
 `;
