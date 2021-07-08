@@ -3,19 +3,23 @@ import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../utils/dimensions';
 import styled from 'styled-components/native';
-import { StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import axios from 'axios';
-
+import MapViewDirections from 'react-native-maps-directions';
+import { Dimensions, StyleSheet } from 'react-native';
 
 // local import
 import Layout from '../components/layout/layout';
-import {API_KEY} from "@env"
+import { API_KEY } from "@env"
+const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
 const HomeScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
+  const [newLocation, setNewLocation] = useState(null);
   const [destination, setDestination] = useState(null);
   const [mapLocation, setMapLocation] = useState(null);
+
+  const [mapView, setMapView] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -31,7 +35,10 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    location && setMapLocation(regionFrom(location?.coords?.latitude, location?.coords?.longitude, location?.coords?.accuracy))
+    if (location) {
+      setMapLocation([regionFrom(location?.coords?.latitude, location?.coords?.longitude, location?.coords?.accuracy)])
+      mapLocation && setNewLocation(mapLocation[0])
+    }
   }, [location])
 
   const ref = useRef();
@@ -39,9 +46,6 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     ref.current?.setAddressText('');
   }, []);
-
-
-  const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
   const regionFrom = (lat, lon, accuracy) => {
     const oneDegreeOfLongitudeInMeters = 111.32 * 1000;
@@ -62,27 +66,43 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const getPlaceId = async (details) => {
+    setMapLocation([mapLocation[0]])
     //get the location using the place_id
     const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${details?.place_id}&key=${API_KEY}`)
     const { location } = data?.result.geometry
     //set the destination
-    setDestination({
+    let payload = {
       latitude: location.lat,
-      longitude: location.lng
-    })
+      longitude: location.lng,
+      latitudeDelta: 0.015,
+      longitudeDelta: ASPECT_RATIO * 0.0121,
+    }
+    setMapLocation([
+      ...mapLocation,
+      payload
+    ])
+
   }
 
+  const onMapPress = (e) => {
+    setMapLocation([
+      mapLocation[0],
+      e.nativeEvent.coordinate,
+    ])
+  }
 
   return (
     <Layout navigation={navigation}>
-      {mapLocation &&
+      {newLocation &&
         <MapView
           initialRegion={{
-            latitude: mapLocation?.latitude,
-            longitude: mapLocation?.longitude,
+            latitude: newLocation.latitude,
+            longitude: newLocation.longitude,
             latitudeDelta: 0.015,
             longitudeDelta: ASPECT_RATIO * 0.0121,
           }}
+          ref={c => setMapView(c)}
+          onPress={onMapPress}
 
           onRegionChange={onRegionChange}
           scrollEnabled={true}
@@ -91,18 +111,45 @@ const HomeScreen = ({ navigation }) => {
           scalesPageToFit={false}
           style={styles.map}
         >
-          <Marker
-            coordinate={{ latitude: mapLocation?.latitude, longitude: mapLocation?.longitude }}
-            title={"Current Location"}
-          />
-          {destination && 
-            <Marker
-              coordinate={destination}
-              title={"Current Location"}
+
+          {mapLocation.map((coordinate, index) =>
+            <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
+          )}
+
+          {(mapLocation.length >= 2) && (
+            <MapViewDirections
+              origin={mapLocation[0]}
+              waypoints={(mapLocation.length >= 2) ? mapLocation.slice(1, -1) : null}
+              destination={mapLocation[mapLocation.length - 1]}
+              apikey={`${API_KEY}`}
+              strokeWidth={3}
+              strokeColor="hotpink"
+              optimizeWaypoints={true}
+              onStart={(params) => {
+                console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+              }}
+              onReady={result => {
+                console.log(`Distance: ${result.distance} km`)
+                console.log(`Duration: ${result.duration} min.`)
+
+                mapView.fitToCoordinates(result.coordinates, {
+                  edgePadding: {
+                    right: (SCREEN_WIDTH / 20),
+                    bottom: (SCREEN_HEIGHT / 20),
+                    left: (SCREEN_WIDTH / 20),
+                    top: (SCREEN_HEIGHT / 20),
+                  }
+                });
+              }}
+              onError={(errorMessage) => {
+                // console.log('GOT AN ERROR');
+              }}
             />
-          }
+          )}
+
         </MapView>
       }
+
       <Container>
         <SimpleText>
           Alo Djimmy Poliard,
@@ -111,11 +158,13 @@ const HomeScreen = ({ navigation }) => {
           Ki kote ou vle ale kounyea?
         </RequestText>
       </Container>
+
       <GooglePlacesAutocomplete
         ref={ref}
         placeholder='Antre kote ou vle ale a la'
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
+          setMapLocation([mapLocation[0]])
           getPlaceId(details)
           // console.log(data, details);
         }}
@@ -156,13 +205,6 @@ const HomeScreen = ({ navigation }) => {
           },
         }}
       />
-
-      {/* 
-      <RequestContainer>
-        <SimpleText>
-          kjhfaksk
-        </SimpleText>
-      </RequestContainer> */}
 
 
     </Layout>
